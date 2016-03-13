@@ -15,7 +15,9 @@
 		9B5841431C9534280081B9C2 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 9B5841421C9534280081B9C2 /* Assets.xcassets */; };
 		9B5841461C9534280081B9C2 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 9B5841441C9534280081B9C2 /* LaunchScreen.storyboard */; };
 		9B8DEE9A1C9535880010DFE2 /* APIEndpoint.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B8DEE991C9535880010DFE2 /* APIEndpoint.swift */; };
-		9BAE18031C95564D0039AE9C /* README.md in Sources */ = {isa = PBXBuildFile; fileRef = 9BAE18021C95564D0039AE9C /* README.md */; };
+		9BAE18061C9585010039AE9C /* Movie.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9BAE18051C9585010039AE9C /* Movie.swift */; };
+		9BAE18081C9588620039AE9C /* Constant.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9BAE18071C9588620039AE9C /* Constant.swift */; };
+		9BEBA32C1C958BD700BD94BD /* DateISOTransform.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9BEBA32B1C958BD700BD94BD /* DateISOTransform.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -31,7 +33,9 @@
 		9B5841451C9534280081B9C2 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		9B5841471C9534280081B9C2 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		9B8DEE991C9535880010DFE2 /* APIEndpoint.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = APIEndpoint.swift; sourceTree = "<group>"; };
-		9BAE18021C95564D0039AE9C /* README.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
+		9BAE18051C9585010039AE9C /* Movie.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Movie.swift; sourceTree = "<group>"; };
+		9BAE18071C9588620039AE9C /* Constant.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Constant.swift; sourceTree = "<group>"; };
+		9BEBA32B1C958BD700BD94BD /* DateISOTransform.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DateISOTransform.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -84,6 +88,7 @@
 		9B5841381C9534280081B9C2 /* cinemur */ = {
 			isa = PBXGroup;
 			children = (
+				9BAE18041C9584F00039AE9C /* Models */,
 				9B8DEE9D1C954D600010DFE2 /* Resources */,
 				9B8DEE9C1C954D0E0010DFE2 /* ViewControllers */,
 				9B8DEE9B1C954D040010DFE2 /* Extensions */,
@@ -92,10 +97,10 @@
 				9B58413B1C9534280081B9C2 /* FirstViewController.swift */,
 				9B58413D1C9534280081B9C2 /* SecondViewController.swift */,
 				9B5841471C9534280081B9C2 /* Info.plist */,
-				9BAE18021C95564D0039AE9C /* README.md */,
 				9B5841421C9534280081B9C2 /* Assets.xcassets */,
 				9B5841441C9534280081B9C2 /* LaunchScreen.storyboard */,
 				9B58413F1C9534280081B9C2 /* Main.storyboard */,
+				9BAE18071C9588620039AE9C /* Constant.swift */,
 			);
 			path = cinemur;
 			sourceTree = "<group>";
@@ -103,6 +108,7 @@
 		9B8DEE9B1C954D040010DFE2 /* Extensions */ = {
 			isa = PBXGroup;
 			children = (
+				9BEBA32B1C958BD700BD94BD /* DateISOTransform.swift */,
 			);
 			name = Extensions;
 			sourceTree = "<group>";
@@ -119,6 +125,14 @@
 			children = (
 			);
 			name = Resources;
+			sourceTree = "<group>";
+		};
+		9BAE18041C9584F00039AE9C /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				9BAE18051C9585010039AE9C /* Movie.swift */,
+			);
+			name = Models;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -246,9 +260,11 @@
 			files = (
 				9B58413E1C9534280081B9C2 /* SecondViewController.swift in Sources */,
 				9B58413A1C9534280081B9C2 /* AppDelegate.swift in Sources */,
-				9BAE18031C95564D0039AE9C /* README.md in Sources */,
+				9BEBA32C1C958BD700BD94BD /* DateISOTransform.swift in Sources */,
 				9B58413C1C9534280081B9C2 /* FirstViewController.swift in Sources */,
 				9B8DEE9A1C9535880010DFE2 /* APIEndpoint.swift in Sources */,
+				9BAE18061C9585010039AE9C /* Movie.swift in Sources */,
+				9BAE18081C9588620039AE9C /* Constant.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -9,9 +9,7 @@
 import Foundation
 
 public class APIEndpoint {
-    
-    public static var root: String = "http://www.phuot.co"
-    public static var rooms: String = root + "/rooms"
-    public static var checkRoom: String = rooms + "/check"
-    public static var wsSubscribe: String = root + "/subscribe"
+    public static var nowPlaying: String = "https://api.themoviedb.org/3/movie/now_playing"
+    public static var topRated: String = "https://api.themoviedb.org/3/movie/top_rated"
+    public static var search: String = "https://api.themoviedb.org/3/search/keyword"
 }

@@ -22,7 +22,7 @@ class Movie: Object, Mappable {
     var overview: String?
     var poster: String?
     var backdrop: String?
-    var date: NSDate?
+    var date: String?
     
     // MARK: Constructors
     required init?(_ map: Map) {
@@ -34,13 +34,13 @@ class Movie: Object, Mappable {
         self.title = ""
         self.overview = ""
         self.runtime = 0
-        self.date = NSDate()
+        self.date = ""
         self.poster = ""
         self.backdrop = ""
         super.init()
     }
     
-    convenience init(id: Int, title: String, overview: String, runtime: Int, date: NSDate, poster: String, backdrop: String) {
+    convenience init(id: Int, title: String, overview: String, runtime: Int, date: String, poster: String, backdrop: String) {
         self.init()
         self.id = id
         self.overview = overview
@@ -67,6 +67,25 @@ class Movie: Object, Mappable {
         self.poster <- map["poster_path"]
         self.backdrop <- map["backdrop_path"]
         self.runtime <- map["runtime"]
-        self.date <- (map["release_date"], DateISOTransform())
+        self.date <- (map["release_date"])
+    }
+}
+
+class MovieResponse: Mappable {
+    
+    var page: Int?
+    var results: [Movie]?
+    var totalPages: Int?
+    var totalResults: Int?
+    
+    required init?(_ map: Map){
+        
+    }
+    
+    func mapping(map: Map) {
+        page <- map["page"]
+        results <- map["results"]
+        totalPages <- map["total_pages"]
+        totalResults <- map["total_results"]
     }
 }

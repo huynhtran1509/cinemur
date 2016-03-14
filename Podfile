@@ -8,11 +8,12 @@ target 'cinemur' do
     pod 'AlamofireImage'
     pod 'AlamofireObjectMapper'
     
+    pod 'Kingfisher', '~> 1.9'
     pod 'SwiftyUserDefaults'
     pod 'Starscream'
     pod 'SwiftyJSON'
     pod 'RealmSwift'
-    pod 'SwiftDate'
+    pod 'SnapKit'
     
     pod 'NSLogger'
     pod 'NSLogger/NoStrip'

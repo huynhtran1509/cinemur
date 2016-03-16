@@ -32,7 +32,7 @@ The following **additional** features are implemented:
 
 Here's a walkthrough of implemented user stories:
 
-[![Video Walkthrough](https://ra.githubusercontent.com/tieubao/cinemur/master/cinemur.gif)](/cinemur.gif)
+[![Video Walkthrough](https://raw.githubusercontent.com/tieubao/cinemur/master/cinemur.gif)](/cinemur.gif)
 
 GIF created with [LiceCap](http://www.cockos.com/licecap/).
 

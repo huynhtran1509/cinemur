@@ -55,6 +55,7 @@ class NowPlayingViewController: UIViewController {
         
         // Initialize a UIRefreshControl
         let refreshControl = UIRefreshControl()
+        refreshControl.tintColor = UIColor.whiteColor()
         refreshControl.addTarget(self, action: "refreshControlAction:", forControlEvents: UIControlEvents.ValueChanged)
         tableView.insertSubview(refreshControl, atIndex: 0)
         
@@ -144,7 +145,9 @@ extension NowPlayingViewController: UIScrollViewDelegate {
     
     func loadMoreData() {
         
-        log.info("Page: \(page)")
+        guard ReachabilityHelper.isConnectedToNetwork() else {
+            return
+        }
         
         self.page = self.page + 1
         let options = ["page": page]
@@ -158,7 +161,7 @@ extension NowPlayingViewController: UIScrollViewDelegate {
                 self.loadingMoreView!.stopAnimating()
                 
                 guard error == nil else {
-                    self.view.makeToast("Something went wrong with the connection.\nPlease try again")
+                    self.view.makeToast("Something went wrong with the connection. Please try again.")
                     return
                 }
                 
@@ -185,6 +188,12 @@ extension NowPlayingViewController: UIScrollViewDelegate {
             
             // When the user has scrolled past the threshold, start requesting
             if(scrollView.contentOffset.y > scrollOffsetThreshold && tableView.dragging) {
+                
+                guard ReachabilityHelper.isConnectedToNetwork() else {
+                    self.view.makeToast("Something went wrong with the connection. Please try again.")
+                    return
+                }
+                
                 isMoreDataLoading = true
                 
                 // Update position of loadingMoreView, and start loading indicator

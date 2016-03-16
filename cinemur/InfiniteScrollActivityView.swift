@@ -27,6 +27,7 @@ class InfiniteScrollActivityView: UIView {
     override func layoutSubviews() {
         super.layoutSubviews()
         activityIndicatorView.center = CGPointMake(self.bounds.size.width/2, self.bounds.size.height/2)
+        activityIndicatorView.color = UIColor.whiteColor()
     }
     
     func setupActivityIndicator() {
@@ -39,7 +40,7 @@ class InfiniteScrollActivityView: UIView {
         self.activityIndicatorView.stopAnimating()
         self.hidden = true
     }
-
+    
     func startAnimating() {
         self.hidden = false
         self.activityIndicatorView.startAnimating()

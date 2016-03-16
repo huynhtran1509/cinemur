@@ -36,6 +36,27 @@ class NowPlayingViewController: UIViewController {
             self.filteredData = self.movies
             self.tableView.reloadData()
         }
+        
+        // Initialize a UIRefreshControl
+        let refreshControl = UIRefreshControl()
+        refreshControl.addTarget(self, action: "refreshControlAction:", forControlEvents: UIControlEvents.ValueChanged)
+        tableView.insertSubview(refreshControl, atIndex: 0)
+    }
+    
+    // Makes a network request to get updated data
+    // Updates the tableView with the new data
+    // Hides the RefreshControl
+    func refreshControlAction(refreshControl: UIRefreshControl) {
+        let options = ["page": 1]
+        Store.getNowPlayingMovies(options) { (items, error) -> Void in
+            self.movies = items as! [Movie]
+            self.filteredData = self.movies
+            
+            // TODO: Maybe we need to merge the old data and new data before we call reloadData()
+            
+            self.tableView.reloadData()
+            refreshControl.endRefreshing()
+        }
     }
     
     override func didReceiveMemoryWarning() {
@@ -45,7 +66,7 @@ class NowPlayingViewController: UIViewController {
 }
 
 extension NowPlayingViewController: UITableViewDataSource, UITableViewDelegate {
-
+    
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCellWithIdentifier("me.tieubao.cinemur.MovieCell", forIndexPath: indexPath) as! MovieCell
         

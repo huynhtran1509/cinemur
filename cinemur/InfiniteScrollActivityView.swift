@@ -39,7 +39,7 @@ class InfiniteScrollActivityView: UIView {
         self.activityIndicatorView.stopAnimating()
         self.hidden = true
     }
-    
+
     func startAnimating() {
         self.hidden = false
         self.activityIndicatorView.startAnimating()

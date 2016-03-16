@@ -8,6 +8,7 @@
 
 import UIKit
 import Kingfisher
+import ReachabilitySwift
 
 class NowPlayingViewController: UIViewController {
     
@@ -20,6 +21,8 @@ class NowPlayingViewController: UIViewController {
     var isMoreDataLoading = false
     var loadingMoreView: InfiniteScrollActivityView?
     
+    var reachability: Reachability?
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -27,14 +30,24 @@ class NowPlayingViewController: UIViewController {
         let searchBar: UISearchBar = UISearchBar()
         searchBar.placeholder = "Search"
         searchBar.sizeToFit()
+        searchBar.searchBarStyle = .Prominent
         searchBar.delegate = self
         self.navigationItem.titleView = searchBar;
         
         self.tableView.delegate = self
         self.tableView.dataSource = self
         
+        // Setup Reachability
+        
+        // Get first page of data
         let options = ["page": page]
         Store.getNowPlayingMovies(options) { (items, error) -> Void in
+            
+            guard error == nil else {
+                self.view.makeToast("Something went wrong with the connection.\nPlease try again")
+                return
+            }
+            
             self.movies = items as! [Movie]
             self.filteredData = self.movies
             self.tableView.reloadData()
@@ -65,6 +78,13 @@ class NowPlayingViewController: UIViewController {
     func refreshControlAction(refreshControl: UIRefreshControl) {
         let options = ["page": 1]
         Store.getNowPlayingMovies(options) { (items, error) -> Void in
+            
+            guard error == nil else {
+                refreshControl.endRefreshing()
+                self.view.makeToast("Something went wrong with the connection.\nPlease try again")
+                return
+            }
+            
             self.movies = items as! [Movie]
             self.filteredData = self.movies
             
@@ -87,7 +107,6 @@ extension NowPlayingViewController: UITableViewDataSource, UITableViewDelegate {
         let cell = tableView.dequeueReusableCellWithIdentifier("me.tieubao.cinemur.MovieCell", forIndexPath: indexPath) as! MovieCell
         
         let movie = self.filteredData[indexPath.row]
-        
         
         if movie.backdrop != nil {
             let backdropURL = "https://image.tmdb.org/t/p/original" + movie.backdrop!
@@ -127,13 +146,22 @@ extension NowPlayingViewController: UIScrollViewDelegate {
         
         log.info("Page: \(page)")
         
-        page = page + 1
+        self.page = self.page + 1
         let options = ["page": page]
         Store.getNowPlayingMovies(options) { (items, error) -> Void in
             
             guard error == nil else {
+                
+                // Restore states of the app
+                self.page = self.page - 1
                 self.isMoreDataLoading = false
                 self.loadingMoreView!.stopAnimating()
+                
+                guard error == nil else {
+                    self.view.makeToast("Something went wrong with the connection.\nPlease try again")
+                    return
+                }
+                
                 return
             }
             

@@ -17,6 +17,9 @@ class NowPlayingViewController: UIViewController {
     var movies: [Movie] = []
     var filteredData: [Movie] = []
     
+    var isMoreDataLoading = false
+    var loadingMoreView: InfiniteScrollActivityView?
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -41,6 +44,19 @@ class NowPlayingViewController: UIViewController {
         let refreshControl = UIRefreshControl()
         refreshControl.addTarget(self, action: "refreshControlAction:", forControlEvents: UIControlEvents.ValueChanged)
         tableView.insertSubview(refreshControl, atIndex: 0)
+        
+        // Setup Infinite Scroll loading indicator
+        let frame = CGRectMake(0, tableView.contentSize.height, tableView.bounds.size.width, InfiniteScrollActivityView.defaultHeight)
+        loadingMoreView = InfiniteScrollActivityView(frame: frame)
+        loadingMoreView!.hidden = true
+        tableView.addSubview(loadingMoreView!)
+        
+        // Add place for loading more view
+        var insets = tableView.contentInset;
+        insets.bottom += InfiniteScrollActivityView.defaultHeight;
+        tableView.contentInset = insets
+        
+        
     }
     
     // Makes a network request to get updated data
@@ -72,17 +88,25 @@ extension NowPlayingViewController: UITableViewDataSource, UITableViewDelegate {
         
         let movie = self.filteredData[indexPath.row]
         
-        let backdropURL = "https://image.tmdb.org/t/p/original" + movie.backdrop!
-        cell.backdropView.kf_showIndicatorWhenLoading = true
-        cell.backdropView.kf_setImageWithURL(NSURL(string: backdropURL)!)
         
-        let posterURL = "https://image.tmdb.org/t/p/w342" + movie.poster!
-        cell.posterView.bringSubviewToFront(cell.backdropView)
-        cell.posterView.kf_showIndicatorWhenLoading = true
-        cell.posterView.kf_setImageWithURL(
-            NSURL(string: posterURL)!,
-            placeholderImage: nil,
-            optionsInfo: [.Transition(ImageTransition.Fade(1))])
+        if movie.backdrop != nil {
+            let backdropURL = "https://image.tmdb.org/t/p/original" + movie.backdrop!
+            cell.backdropView.kf_showIndicatorWhenLoading = true
+            cell.backdropView.kf_setImageWithURL(NSURL(string: backdropURL)!,
+                placeholderImage: nil,
+                optionsInfo: [.Transition(ImageTransition.Fade(1))])
+        }
+        
+        if movie.poster != nil {
+            let posterURL = "https://image.tmdb.org/t/p/w342" + movie.poster!
+            cell.posterView.bringSubviewToFront(cell.backdropView)
+            cell.posterView.kf_showIndicatorWhenLoading = true
+            cell.posterView.kf_setImageWithURL(
+                NSURL(string: posterURL)!,
+                placeholderImage: nil,
+                optionsInfo: [.Transition(ImageTransition.Fade(1))])
+            
+        }
         
         cell.titleLabel.text = movie.title
         cell.runtimeLabel.text = movie.date
@@ -95,6 +119,55 @@ extension NowPlayingViewController: UITableViewDataSource, UITableViewDelegate {
         return filteredData.count
     }
     
+}
+
+extension NowPlayingViewController: UIScrollViewDelegate {
+    
+    func loadMoreData() {
+        
+        log.info("Page: \(page)")
+        
+        page = page + 1
+        let options = ["page": page]
+        Store.getNowPlayingMovies(options) { (items, error) -> Void in
+            
+            guard error == nil else {
+                self.isMoreDataLoading = false
+                self.loadingMoreView!.stopAnimating()
+                return
+            }
+            
+            self.movies += items as! [Movie]
+            self.filteredData = self.movies
+            
+            // TODO: Maybe we need to merge the old data and new data before we call reloadData()
+            
+            self.isMoreDataLoading = false
+            self.loadingMoreView!.stopAnimating()
+            self.tableView.reloadData()
+        }
+    }
+    
+    func scrollViewDidScroll(scrollView: UIScrollView) {
+        if (!isMoreDataLoading) {
+            
+            // Calculate the position of one screen length before the bottom of the results
+            let scrollViewContentHeight = tableView.contentSize.height
+            let scrollOffsetThreshold = scrollViewContentHeight - tableView.bounds.size.height
+            
+            // When the user has scrolled past the threshold, start requesting
+            if(scrollView.contentOffset.y > scrollOffsetThreshold && tableView.dragging) {
+                isMoreDataLoading = true
+                
+                // Update position of loadingMoreView, and start loading indicator
+                let frame = CGRectMake(0, tableView.contentSize.height, tableView.bounds.size.width, InfiniteScrollActivityView.defaultHeight)
+                loadingMoreView?.frame = frame
+                loadingMoreView!.startAnimating()
+                
+                loadMoreData()
+            }
+        }
+    }
 }
 
 extension NowPlayingViewController: UISearchBarDelegate {
